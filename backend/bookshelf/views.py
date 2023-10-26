@@ -6,6 +6,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
+
+from bookshelf.ai import get_book_detail
 from bookshelf.models import Book
 from bookshelf.serializers.BookSerializer import BookSerializer
 from bookshelf.serializers.userSerializers import MyTokenObtainPairSerializer, RegisterSerializer
@@ -72,3 +74,16 @@ class BookAction(APIView):
             book.delete()
             return Response( status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class BookDetails (APIView):
+    lookup_url_kwarg = 'id'
+    permission_classes = (AllowAny,)
+    serializer_class = BookSerializer
+
+    def get(self, request, id, format=None):
+        try:
+            book = Book.objects.get(id=id)
+            detail = get_book_detail(book.title)
+            return Response(data=detail, status=status.HTTP_200_OK)
+        except Book.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

@@ -9,6 +9,7 @@ from bookshelf.views import MyObtainTokenPairView, RegisterView
 app_name = 'bookshelf'
 
 urlpatterns = [
+    path('ai/<int:id>/', views.BookDetails.as_view()),
     path('<int:id>/', views.BookAction.as_view()),
     path('', views.BookList.as_view() ),
     path('register/', RegisterView.as_view(), name='auth_register'),
