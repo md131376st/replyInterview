@@ -25,9 +25,6 @@ SECRET_KEY = "django-insecure-xi(f-mm(+f*902-vyewx-auw2z#f07x7f19f#hczup3#cn*2qw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +38,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'djmoney',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +49,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -116,7 +117,15 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
 
+]
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

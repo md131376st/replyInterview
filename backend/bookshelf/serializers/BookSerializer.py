@@ -25,17 +25,27 @@ class BookSerializer(serializers.ModelSerializer):
         return book
 
     def update(self, book, validated_data):
-        authors_data = validated_data.pop('authors')
-        authers=[]
-        for auther in authors_data:
-            author, created = Author.objects.update_or_create(name=auther["name"])
-            authers.append(author.id)
-        book.authors.set(authers)
+        authors_data = self.validated_data.pop('authors')
+        authors = []
+        for author in authors_data:
+            author, created = Author.objects.update_or_create(name=author["name"])
+            authors.append(author)
+
+        for author in authors:
+            book.authors.add(author)
+        for author in book.authors.all():
+            if author not in authors:
+                book.authors.remove(author)
+
+        # Update the book fields
         fields = ['title', 'year', 'price']
         for field in fields:
             try:
                 setattr(book, field, validated_data[field])
             except KeyError:  # validated_data may not contain all fields during HTTP PATCH
                 pass
+
+        # Save the book to the database
         book.save()
+
         return book
