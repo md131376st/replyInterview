@@ -77,7 +77,10 @@ class BookDetails (APIView):
 
 class BookReview(ListCreateAPIView):
     lookup_url_kwarg = 'id'
-    queryset = Review.objects.all()
+
     serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(book__id=self.kwargs['id']).all()
     # permission_classes = (IsAuthenticated,)
 
