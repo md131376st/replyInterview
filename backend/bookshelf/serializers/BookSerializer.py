@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bookshelf.models import Book, Author
+from bookshelf.models import Book, Author, Review
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -49,3 +49,9 @@ class BookSerializer(serializers.ModelSerializer):
         book.save()
 
         return book
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'review', 'rate', 'book', 'user']

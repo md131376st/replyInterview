@@ -1,28 +1,13 @@
-from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status, filters
-from rest_framework.generics import  ListCreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework import filters, status
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 
 from bookshelf.ai import get_book_detail
-from bookshelf.models import Book
-from bookshelf.serializers.BookSerializer import BookSerializer
-from bookshelf.serializers.userSerializers import MyTokenObtainPairSerializer, RegisterSerializer
-
-
-# Create your views here.
-class MyObtainTokenPairView(TokenObtainPairView):
-    permission_classes = (AllowAny,)
-    serializer_class = MyTokenObtainPairSerializer
-
-
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+from bookshelf.models import Book, Review
+from bookshelf.serializers.BookSerializer import BookSerializer, ReviewSerializer
 
 
 class BookList(ListCreateAPIView):
@@ -75,6 +60,7 @@ class BookAction(APIView):
             return Response( status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 class BookDetails (APIView):
     lookup_url_kwarg = 'id'
     permission_classes = (AllowAny,)
@@ -87,3 +73,11 @@ class BookDetails (APIView):
             return Response(data=detail, status=status.HTTP_200_OK)
         except Book.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class BookReview(ListCreateAPIView):
+    lookup_url_kwarg = 'id'
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    # permission_classes = (IsAuthenticated,)
+

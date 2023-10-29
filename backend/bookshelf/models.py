@@ -23,3 +23,12 @@ class Book(models.Model):
         return self.title
 
 
+class Review(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    review = models.TextField()
+    book = models.ForeignKey( Book,on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rate = models.IntegerField()
+
+    def __str__(self):
+        return self.book.title + " " + self.user.username + " "+ self.review +" " +self.rate
