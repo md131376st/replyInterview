@@ -2,8 +2,9 @@
 
 Welcome to the Bookstore Web Application, a simple web-based system that allows users to browse, manage, and review books in the inventory.
 
-![Bookstore](bookstore-screenshot.png)
+![BooksDetail](bookDetailpage.png)
 
+![Bookstore](mainpage.png)
 ## Table of Contents
 
 - [Overview](#overview)
